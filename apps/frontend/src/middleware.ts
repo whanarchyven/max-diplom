@@ -1,37 +1,40 @@
-// middleware.ts
-import { NextResponse } from 'next/server';
-import subdomains from './subdomains.json';
-//Заместо импорта jsona тянем данные с ручки
-export const config = {
-    matcher: [
-        "/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)",
-    ],
-};
+import { type NextRequest, NextResponse } from 'next/server';
 
-export default async function middleware(req: Request) {
-    const url = new URL(req.url);
-    const hostname = req.headers.get("host") || "";
+// List of all supported locales
+const locales = ['en', 'ru'];
+const defaultLocale = 'ru';
 
-    // Определяем допустимые домены (локальный хост и домен для продакшена)
-    const allowedDomains = ["localhost:3001", "aicharm.com"];
+// Get the preferred locale from request
+function getLocale(request: NextRequest) {
+  // Check for locale in cookie or headers
+  const acceptLanguage = request.headers.get('accept-language') || '';
+  const preferredLocale = acceptLanguage.split(',')[0].split('-')[0];
 
-    // Проверяем, существует ли hostname в допустимых доменах
-    const isAllowedDomain = allowedDomains.some(domain => hostname.includes(domain));
+  // Check if the preferred locale is supported
+  if (locales.includes(preferredLocale)) {
+    return preferredLocale;
+  }
 
-    // Извлекаем возможный поддомен из URL
-    const subdomain = hostname.split('.')[0];
-
-    // Если мы находимся на разрешённом домене и это не поддомен, разрешаем запрос
-    if (isAllowedDomain && !subdomains.some(d => d.subdomain === subdomain)) {
-        return NextResponse.next();
-    }
-
-    const subdomainData = subdomains.find(d => d.subdomain === subdomain);
-
-    if (subdomainData) {
-        // Переписываем URL на динамический маршрут, основанный на поддомене
-        return NextResponse.rewrite(new URL(`/${subdomain}${url.pathname}`, req.url));
-    }
-
-    return new Response(null, { status: 404 });
+  return defaultLocale;
 }
+
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Check if pathname has a locale
+  const pathnameHasLocale = locales.some(
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  );
+
+  if (pathnameHasLocale) return;
+
+  // Redirect if there is no locale
+  const locale = getLocale(request);
+  request.nextUrl.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
+
+  return NextResponse.redirect(request.nextUrl);
+}
+
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|images|favicon.ico).*)'],
+};

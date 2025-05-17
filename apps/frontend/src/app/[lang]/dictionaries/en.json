@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "title": "Cancer Research Institute",
+    "description": "Leading research institute dedicated to cancer research and treatment development"
+  },
+  "navigation": {
+    "home": "Home",
+    "news": "News",
+    "about": "About Us",
+    "contact": "Contact"
+  },
+  "home": {
+    "title": "Cancer Research Institute",
+    "subtitle": "Dedicated to advancing cancer research and developing innovative treatments",
+    "cta": "Learn More"
+  },
+  "news": {
+    "title": "Latest News",
+    "readMore": "Read More",
+    "noNews": "No news available at the moment"
+  },
+  "about": {
+    "title": "About Us",
+    "mission": {
+      "title": "Our Mission",
+      "description": "Our mission is to advance scientific knowledge about cancer and develop effective treatments through innovative research and collaboration."
+    },
+    "research": {
+      "title": "Research Focus",
+      "description": "We focus on understanding the molecular mechanisms of cancer development, identifying new therapeutic targets, and developing novel treatment approaches."
+    },
+    "team": {
+      "title": "Our Team",
+      "description": "Our institute brings together leading scientists, clinicians, and researchers dedicated to fighting cancer through groundbreaking research."
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "submit": "Send Message"
+    },
+    "address": "123 Research Avenue, Science City",
+    "phone": "+1 (555) 123-4567",
+    "email": "info@cancerresearch.org"
+  }
+}
